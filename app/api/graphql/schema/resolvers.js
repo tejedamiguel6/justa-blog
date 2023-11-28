@@ -1,11 +1,19 @@
 export const resolvers = {
   Query: {
-    userByID: async (parent, { accountId }, { dataSources }) => {
-      const test = await dataSources.PlaystationAPI.getUserByProfileID(
-        accountId
-      )
+    users: (parent, { accountId }, { dataSources }, info) => {
+      return dataSources.PlaystationAPI.getUserByProfileName(accountId)
+    },
 
-      return test
+    userByID: async (parent, { accountId }, { dataSources }) => {
+      return dataSources.PlaystationAPI.getUserByProfileID(accountId)
+    },
+
+    testingServerComponents: async (parent, args, ctx, info) => {
+      return 'this is a test'
+    },
+
+    recentlyPlayedGames: async (parent, args, { dataSources }, infor) => {
+      return dataSources.PlaystationAPI.getRecentlyPlayedGames()
     },
   },
 }

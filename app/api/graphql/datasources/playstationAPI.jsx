@@ -1,23 +1,17 @@
-// will delete these imports after i finish
-// migrating to nextjs and fully test it
-
-// const { RESTDataSource } = require('@apollo/datasource-rest')
-// const { getUserTitles } = require('psn-api')
-// const psnApi = require('psn-api')
-// import { psnApi } from 'psn-api'
 import { RESTDataSource } from '@apollo/datasource-rest'
 import { getUserTitles } from 'psn-api'
 import dotenv from 'dotenv'
-dotenv.config()
-
 import {
   makeUniversalSearch,
+  getRecentlyPlayedGames,
   exchangeNpssoForCode,
   exchangeCodeForAccessToken,
   exchangeRefreshTokenForAuthTokens,
   getProfileFromUserName,
   getBasicPresence,
 } from 'psn-api'
+
+dotenv.config()
 
 export class PlaystationAPI extends RESTDataSource {
   constructor() {
@@ -47,8 +41,6 @@ export class PlaystationAPI extends RESTDataSource {
       'SocialAllAccounts'
     )
     // console.log(response.domainResponses[0].results, 'this is the response')
-    // console.log(response, 'hetyy')
-    // console.log(response, 'heyytyyy')
     return response
   }
 
@@ -62,6 +54,14 @@ export class PlaystationAPI extends RESTDataSource {
     )
     return response.domainResponses[0].results[0]
     // console.log(response.domainResponses[0].results[0], '((((')
+  }
+
+  async getRecentlyPlayedGames() {
+    const token = await this.getAccessToken()
+    const response = await getRecentlyPlayedGames(token)
+
+    // return response.data.games
+    return response.data.gameLibraryTitlesRetrieve.games
   }
 
   async getUserGameTitles(accountId) {

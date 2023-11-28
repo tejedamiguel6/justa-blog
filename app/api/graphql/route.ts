@@ -33,14 +33,6 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, {
       },
     }
   },
-  // context: async ({ req }) => {
-  //   return {
-
-  //     dataSources: {
-  //       PlaystationAPI: new PlaystationAPI(),
-  //     },
-  //   }
-  // },
 })
 
 export { handler as GET, handler as POST }

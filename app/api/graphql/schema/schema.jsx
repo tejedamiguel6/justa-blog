@@ -1,23 +1,15 @@
-// const { gql } = require('apollo-server')
 import { gql } from 'graphql-tag'
 
 export const typeDefs = gql`
   type Query {
-    users: [User]
+    users: User
     user(accountId: String!): User
     userByID(accountId: String!): User
     # query game title by users
     userGameTitle(accountId: String!): [TrophyTitle]
-    me(id: String): Me
     presence(accountId: String!): Presence
-  }
-
-  # spotify
-  type Me {
-    country: String
-    display_name: String
-    email: String
-    id: String
+    recentlyPlayedGames(accountId: String): [RecentlyPlayedGame]
+    testingServerComponents: String
   }
 
   # this user type is mainly for
@@ -28,6 +20,25 @@ export const typeDefs = gql`
     score: Int
     profile: Profile
     socialMetadata: SocialMetadata
+  }
+
+  type RecentlyPlayedGames {
+    id: String
+    RecentlyPlayedGames: [RecentlyPlayedGame]
+  }
+
+  type RecentlyPlayedGame {
+    name: String!
+    lastPlayedDateTime: String
+    conceptId: String
+    titleId: String
+    platform: String
+    entitlementId: String
+    image: GameImageUrl
+  }
+
+  type GameImageUrl {
+    url: String
   }
 
   # getUserByProfileName
