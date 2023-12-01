@@ -2,14 +2,15 @@ import { gql } from 'graphql-tag'
 
 export const typeDefs = gql`
   type Query {
-    users: User
+    # get any playerInfo
+    users(accountId: String): LegacyUser
     user(accountId: String!): User
     userByID(accountId: String!): User
     # query game title by users
     userGameTitle(accountId: String!): [TrophyTitle]
+    # retrieves presence of the player such as online, lastAvailableDate
     presence(accountId: String!): Presence
     recentlyPlayedGames(accountId: String): [RecentlyPlayedGame]
-    testingServerComponents: String
   }
 
   # this user type is mainly for
@@ -20,6 +21,56 @@ export const typeDefs = gql`
     score: Int
     profile: Profile
     socialMetadata: SocialMetadata
+  }
+
+  type LegacyUser {
+    onlineId: String
+    accountId: String
+    npId: String
+    avatarUrls: [AvatarUrl]
+    plus: Int
+    personalDetail: PersonalDetail
+    aboutMe: String
+    languagesUsed: String
+    trophySummary: TrophySummary
+    isOfficiallyVerified: Boolean
+    personalDetailSharing: String
+    personalDetailSharingRequestMessageFlag: Boolean
+    primaryOnlineStatus: String
+    presences: [Presences]
+    friendRelation: Boolean
+    requestMessageFlag: Boolean
+    blocking: Boolean
+    following: Boolean
+    # consoleAvailability:
+  }
+
+  type PersonalDetail {
+    firstName: String
+    lastName: String
+    profilePictureUrls: [ProfilePictureUrls]
+  }
+
+  type ProfilePictureUrls {
+    size: String
+    profilePictureUrl: String
+  }
+
+  # type Profile {
+  #   onlineId: String
+  #   accountId: String
+  #   presences: [Presences]
+  #   npId: String
+  #   plus: Int
+  #   aboutMe: String
+  #   trophySummary: TrophySummary
+  #   isOfficiallyVerified: Boolean
+  #   personalDetailSharing: String
+  # }
+
+  type AvatarUrl {
+    size: String
+    avatarUrl: String
   }
 
   type RecentlyPlayedGames {
@@ -58,6 +109,33 @@ export const typeDefs = gql`
     onlineStatus: String
     hasBoradCastData: String
     lastOnlineDate: String
+  }
+
+  # ALL TROPHY SCHEMA
+  type Trophies {
+    trophySetVersion: String
+    hasTrophyGroups: Boolean
+    Trophies: [TitleThinTrophy]
+    totalItemCount: Int
+    nextOffset: Int
+    previousOffset: Int
+  }
+
+  type TitleThinTrophy {
+    trophyId: Int
+    trophyHidden: Int
+    trophyType: String
+    trophyName: String
+    trohpyDetail: String
+    trophyIconUrl: String
+    trophyGroupId: String
+  }
+
+  type TrophyCounts {
+    bronze: Int
+    silver: Int
+    gold: Int
+    platimnums: Boolean
   }
 
   type TrophySummary {
@@ -120,6 +198,7 @@ export const typeDefs = gql`
     primaryPlatformInfo: PrimaryPlatformInfo
     lastOnlineDate: String
     onlineStatus: String
+    platform: String
     gameTitleInfoList: GameTitleInfoList
   }
 

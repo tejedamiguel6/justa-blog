@@ -40,8 +40,9 @@ export class PlaystationAPI extends RESTDataSource {
       username,
       'SocialAllAccounts'
     )
-    // console.log(response.domainResponses[0].results, 'this is the response')
-    return response
+    // console.log(response.profile, 'this is the response')
+    // return response
+    return response.profile
   }
 
   async getUserByProfileID(username) {
@@ -79,7 +80,8 @@ export class PlaystationAPI extends RESTDataSource {
   async getBasicPresence(accountId) {
     const token = await this.getAccessToken()
     const response = await getBasicPresence(token, accountId)
-    return response
+    return response.basicPresence
+    // console.log(response.basicPresence, 'get')
   }
 
   // not sure why i need this

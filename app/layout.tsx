@@ -19,7 +19,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body
+        className={`${inter.className} max-w-screen-2xl mx-auto  border-2 border-red-400`}
+      >
         <Navbar />
 
         {children}

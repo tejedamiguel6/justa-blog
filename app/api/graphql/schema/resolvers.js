@@ -1,6 +1,6 @@
 export const resolvers = {
   Query: {
-    users: (parent, { accountId }, { dataSources }, info) => {
+    users: async (parent, { accountId }, { dataSources }, info) => {
       return dataSources.PlaystationAPI.getUserByProfileName(accountId)
     },
 
@@ -8,12 +8,12 @@ export const resolvers = {
       return dataSources.PlaystationAPI.getUserByProfileID(accountId)
     },
 
-    testingServerComponents: async (parent, args, ctx, info) => {
-      return 'this is a test'
+    recentlyPlayedGames: async (parent, args, { dataSources }, info) => {
+      return dataSources.PlaystationAPI.getRecentlyPlayedGames()
     },
 
-    recentlyPlayedGames: async (parent, args, { dataSources }, infor) => {
-      return dataSources.PlaystationAPI.getRecentlyPlayedGames()
+    presence: async (parent, { accountId }, { dataSources }, info) => {
+      return dataSources.PlaystationAPI.getBasicPresence(accountId)
     },
   },
 }
