@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { ApolloWrapper } from './lib/apollo-wrapper'
 
 // COMPONENTS
 import Navbar from './components/navigation/Navbar'
@@ -22,9 +23,11 @@ export default function RootLayout({
       <body
         className={`${inter.className} max-w-screen-2xl mx-auto  border-2 border-red-400`}
       >
-        <Navbar />
+        <ApolloWrapper>
+          <Navbar />
 
-        {children}
+          {children}
+        </ApolloWrapper>
       </body>
     </html>
   )

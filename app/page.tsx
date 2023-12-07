@@ -1,5 +1,6 @@
 import { getClient } from './lib/client'
 import { gql } from '@apollo/client'
+import RecentlyPlayedGames from './components/recentlyPlayedGames/recentlyPlayedGames'
 
 import Image from 'next/image'
 
@@ -26,6 +27,11 @@ const query = gql`
     }
     # presence(accountId: $presenceAccountId) {
     #   availability
+    #   primaryPlatformInfo {
+    #     onlineStatus
+    #     lastOnlineDate
+    #     platform
+    #   }
     # }
   }
 `
@@ -34,8 +40,6 @@ export default async function Home() {
     query: query,
     variables: { accountId: 'Botsd0ntcry_' },
   })
-  //
-  console.log(data, '<--yay-')
 
   const psnImage =
     data.users.personalDetail.profilePictureUrls[0].profilePictureUrl
@@ -43,37 +47,44 @@ export default async function Home() {
   const userName = data.users.onlineId
 
   const aboutMe = data.users.aboutMe
-  const firstName = data.users.personalDetail.firstName
-  const lastName = data.users.personalDetail.lastName
 
-  console.log(firstName, 'lol')
-
-  // console.log(psnImage, 'omg')
+  const onlineStatus = data.users.primaryOnlineStatus
 
   return (
-    <div className='grid gap-4 grid-cols-8 border-2 border-blue-500 py-8 my-6'>
-      <div className='col-span-2 py-8 mx-4 flex flex-col items-center justify-center '>
-        {/* Adjust the width and height as needed */}
-        <Image
-          className='content-center'
-          src={psnImage}
-          alt='Playstation image'
-          width={260}
-          height={260}
-        />
+    <>
+      <div className='grid gap-4 grid-cols-3 border-2 border-blue-900 py-8 my-6'>
+        <div>
+          {/* Adjust the width and height as needed */}
 
-        <div className='flex flex-wrap  py-3 px-3 border-2 border-red-500 text-center'>
-          <h1>UserName: {userName}</h1>
-          <p>
-            Name: <span>{firstName}</span>
-          </p>
-          <p>
-            LastName: <span>{lastName}</span>
-          </p>
+          <div>
+            <h1>filler content here for the grid</h1>
+          </div>
+        </div>
+
+        <div className='flex flex-col items-center justify-center  py-8 mx-4  '>
+          <Image
+            className='content-center'
+            src={psnImage}
+            alt='Playstation image'
+            width={260}
+            height={260}
+          />
+          <div className='flex flex-wrap  py-3 px-3 text-center mt-6'>
+            <h1 className='bg-gradient-to-r from-red-600 via-red-500 to-yellow-400  text-transparent bg-clip-text text-lg'>
+              {userName}
+            </h1>
+          </div>
+
+          <p className='cols-span-6'>{aboutMe}</p>
+          <p>{onlineStatus}</p>
         </div>
       </div>
 
-      <p className='cols-span-6'>{aboutMe}</p>
-    </div>
+      <div className='border-blue-400 '>
+        <h1>this is whwer we add the game syoure playing</h1>
+
+        <RecentlyPlayedGames />
+      </div>
+    </>
   )
 }
