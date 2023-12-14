@@ -2,16 +2,20 @@ import { getClient } from './lib/client'
 import { gql } from '@apollo/client'
 import RecentlyPlayedGames from './components/recentlyPlayedGames/recentlyPlayedGames'
 
+import SearchBar from './components/searchBar/searchBar'
 import Image from 'next/image'
+
+import SearchResults from './components/searchBar/SearchResults'
 
 const query = gql`
   query Users($accountId: String) {
     users(accountId: $accountId) {
       onlineId
       accountId
-
       aboutMe
-
+      avatarUrls {
+        avatarUrl
+      }
       plus
       personalDetail {
         firstName
@@ -35,14 +39,18 @@ const query = gql`
     # }
   }
 `
-export default async function Home() {
+export default async function Home({ searchParams }) {
+  const searchQuery = searchParams?.query
+
+  console.log(searchQuery, 'search')
   const { data } = await getClient().query({
     query: query,
-    variables: { accountId: 'Botsd0ntcry_' },
+    variables: { accountId: 'botsd0ntcry_' },
   })
 
   const psnImage =
-    data.users.personalDetail.profilePictureUrls[0].profilePictureUrl
+    data.users.personalDetail?.profilePictureUrls[0].profilePictureUrl
+  const avatarImageUrls = data.users.avatarUrls[0].avatarUrl
 
   const userName = data.users.onlineId
 
@@ -52,10 +60,8 @@ export default async function Home() {
 
   return (
     <>
-      <div className='grid gap-4 grid-cols-3 border-2 border-blue-900 py-8 my-6'>
+      <div className='grid gap-4 grid-cols-3py-8 my-6'>
         <div>
-          {/* Adjust the width and height as needed */}
-
           <div>
             <h1>filler content here for the grid</h1>
           </div>
@@ -63,13 +69,13 @@ export default async function Home() {
 
         <div className='flex flex-col items-center justify-center  py-8 mx-4  '>
           <Image
-            className='content-center'
-            src={psnImage}
+            className='content-center '
+            src={psnImage ? psnImage : avatarImageUrls}
             alt='Playstation image'
             width={260}
             height={260}
           />
-          <div className='flex flex-wrap  py-3 px-3 text-center mt-6'>
+          <div className='flex flex-wrap  py-3 px-3 text-center mt-6 '>
             <h1 className='bg-gradient-to-r from-red-600 via-red-500 to-yellow-400  text-transparent bg-clip-text text-lg'>
               {userName}
             </h1>
@@ -80,9 +86,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className='border-blue-400 '>
-        <h1>this is whwer we add the game syoure playing</h1>
-
+      <div>
         <RecentlyPlayedGames />
       </div>
     </>

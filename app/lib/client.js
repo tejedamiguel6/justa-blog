@@ -11,6 +11,9 @@ export const { getClient } = registerApolloClient(() => {
     cache: new NextSSRInMemoryCache(),
     link: new HttpLink({
       uri: 'http://localhost:3001/api/graphql',
+      fetchOptions: {
+        mode: 'no-cors',
+      },
     }),
   })
 })

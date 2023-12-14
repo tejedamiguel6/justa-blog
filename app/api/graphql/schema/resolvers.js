@@ -15,5 +15,8 @@ export const resolvers = {
     presence: async (parent, { accountId }, { dataSources }, info) => {
       return dataSources.PlaystationAPI.getBasicPresence(accountId)
     },
+    gameTitleTrophy: async (parent, { gameTitleId }, { dataSources }, info) => {
+      return dataSources.PlaystationAPI.getTrophyTitle('PPSA01473_00')
+    },
   },
 }

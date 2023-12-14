@@ -11,6 +11,9 @@ import {
 function makeClient() {
   const httpLink = new HttpLink({
     uri: 'http://localhost:3001/api/graphql',
+    fetchOptions: {
+      mode: 'no-cors',
+    },
   })
 
   return new NextSSRApolloClient({

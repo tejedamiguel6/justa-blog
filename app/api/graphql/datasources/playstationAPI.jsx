@@ -4,13 +4,13 @@ import dotenv from 'dotenv'
 import {
   makeUniversalSearch,
   getRecentlyPlayedGames,
+  getTitleTrophies,
   exchangeNpssoForCode,
   exchangeCodeForAccessToken,
   exchangeRefreshTokenForAuthTokens,
   getProfileFromUserName,
   getBasicPresence,
 } from 'psn-api'
-
 dotenv.config()
 
 export class PlaystationAPI extends RESTDataSource {
@@ -29,9 +29,17 @@ export class PlaystationAPI extends RESTDataSource {
   }
 
   async willSendRequest(_path, request) {
+    console.log(request, '**^$#$')
     const token = await this.getAccessToken()
     request.headers.set('Authorization', `Bearer ${token}`)
   }
+
+  /*
+  *****************************************
+  all request to the playstation network
+  below this line
+  *****************************************
+  */
 
   async getUserByProfileName(username) {
     const token = await this.getAccessToken()
@@ -40,11 +48,13 @@ export class PlaystationAPI extends RESTDataSource {
       username,
       'SocialAllAccounts'
     )
-    // console.log(response.profile, 'this is the response')
-    // return response
     return response.profile
   }
 
+  // A call to this function will make a universal
+  //search across the PlayStation Network
+  //for your search query.Each search
+  // query requires a domain, such as "SocialAllAccounts"
   async getUserByProfileID(username) {
     console.log('yore calling the function')
     const token = await this.getAccessToken()
@@ -54,26 +64,19 @@ export class PlaystationAPI extends RESTDataSource {
       'SocialAllAccounts'
     )
     return response.domainResponses[0].results[0]
-    // console.log(response.domainResponses[0].results[0], '((((')
   }
 
+  // only works for the user that is logged in
   async getRecentlyPlayedGames() {
     const token = await this.getAccessToken()
     const response = await getRecentlyPlayedGames(token)
-
-    // return response.data.games
     return response.data.gameLibraryTitlesRetrieve.games
   }
 
   async getUserGameTitles(accountId) {
     const token = await this.getAccessToken()
-
     const response = await getUserTitles(token, accountId)
-    console.log(
-      'START',
-      response.trophyTitles,
-      'these are the games im playinf'
-    )
+
     return response.trophyTitles
   }
 
@@ -81,7 +84,13 @@ export class PlaystationAPI extends RESTDataSource {
     const token = await this.getAccessToken()
     const response = await getBasicPresence(token, accountId)
     return response.basicPresence
-    // console.log(response.basicPresence, 'get')
+  }
+
+  // getting TROPHIES
+  async getTrophyTitle() {
+    const token = await this.getAccessToken()
+    const response = await getTitleTrophies(token, 'NPWR20188_00', 'all')
+    console.log(response, 'this is trophy response')
   }
 
   // not sure why i need this

@@ -26,6 +26,7 @@ const server = new ApolloServer({
 // Typescript: req has the type NextRequest
 const handler = startServerAndCreateNextHandler<NextRequest>(server, {
   context: async (req) => {
+    // console.log(req.headers, 'who is logged in')
     return {
       req,
       dataSources: {

@@ -11,6 +11,8 @@ export const typeDefs = gql`
     # retrieves presence of the player such as online, lastAvailableDate
     presence(accountId: String!): Presence
     recentlyPlayedGames(accountId: String): [RecentlyPlayedGame]
+    # get trphy from game title
+    gameTitleTrophy(gameTitleId: String): [Trophies]
   }
 
   # this user type is mainly for
@@ -111,11 +113,11 @@ export const typeDefs = gql`
     lastOnlineDate: String
   }
 
-  # ALL TROPHY SCHEMA
+  # GAME TITLE TROPHY
   type Trophies {
     trophySetVersion: String
     hasTrophyGroups: Boolean
-    Trophies: [TitleThinTrophy]
+    trophies: [TitleThinTrophy]
     totalItemCount: Int
     nextOffset: Int
     previousOffset: Int
